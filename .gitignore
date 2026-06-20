@@ -1,0 +1,15 @@
+# Nothing to build — this is a single PowerShell script.
+# Keep local scratch / OS cruft out of the repo.
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Local test output
+*.log
