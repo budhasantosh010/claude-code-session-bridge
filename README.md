@@ -6,6 +6,51 @@
 
 ---
 
+## ⚡ In a hurry? The 3-step version
+
+> *Full explanations are below — but if you just want it done, this is the whole thing.*
+
+```
+STEP 1   Download the script (green "Code" button → Download ZIP → Extract).
+STEP 2   In VS Code: Terminal → New Terminal. Paste ONE line, swap in your folder, press Enter:
+
+   powershell -NoProfile -ExecutionPolicy Bypass -File "‹PATH TO THE .ps1›" -ProjectPath "‹YOUR VS CODE PROJECT FOLDER›" -Apply
+
+STEP 3   Fully quit the desktop app (tray icon → Quit) and reopen it.
+
+Done — your VS Code chats from that folder now appear in the desktop app's sidebar.
+```
+👉 Confused by `‹PATH TO THE .ps1›` vs `‹YOUR PROJECT FOLDER›`? Read **[the 3-folders section](#folders)** — it's the #1 thing people trip on.
+
+---
+
+## 🗺️ Table of contents
+
+**Understand it (5-min read):**
+- [📖 The one idea behind everything](#idea) — notebook + index card
+- [❓ The WH questions](#wh) — who / what / why / when / where / how
+- [🔒 Is it safe?](#safe) — yes, and exactly why
+
+**Do it (copy-paste):**
+- [📥 Install — get the script onto your PC](#install)
+- [🧩 IMPORTANT: don't mix up these 3 folders](#folders) — **read this first**
+- [🚀 How to use it — copy-paste recipes](#recipes)
+  - [✅ Recipe A — add all new chats from one project](#recipe-a) *(the everyday one)*
+  - [👀 Recipe B — preview only, change nothing](#recipe-b)
+  - [🎯 Recipe C — add one specific chat](#recipe-c)
+  - [🌍 Recipe D — every project on the PC](#recipe-d)
+- [⚠️ The step everyone forgets](#restart) — restart the desktop app
+- [🆘 Red error? The two common fixes](#errors)
+
+**Use it:**
+- [🔁 Carry one chat between both apps (ping-pong)](#pingpong)
+- [🗑️ How to undo](#undo)
+- [🧭 Bonus: the folder → "drawer" naming](#drawer)
+- [⚠️ Honest limitations](#limits) · [📜 License](#license)
+
+---
+
+<a id="idea"></a>
 ## 📖 Read this first: the one idea behind everything
 
 Imagine every Claude Code chat is a **notebook**, and there's a **library index card** that points to it.
@@ -31,6 +76,7 @@ When you start a chat in **VS Code**, **no card gets written.** ❌ → the desk
 
 ---
 
+<a id="wh"></a>
 ## ❓ The WH questions (answered plainly)
 
 ### WHO is this for?
@@ -69,6 +115,7 @@ That's it. It **reads** your chats (peek only) and **writes** new little card fi
 
 ---
 
+<a id="safe"></a>
 ## 🔒 Is it safe? (yes — here's exactly why)
 
 ```
@@ -82,6 +129,7 @@ That's it. It **reads** your chats (peek only) and **writes** new little card fi
 
 ---
 
+<a id="install"></a>
 ## 📥 Install — get the script onto your computer
 
 You need just **ONE file**: `register_vscode_session_in_desktop.ps1`. There is **nothing to compile or install** — you save this one file and run it. Pick either way to get it.
@@ -118,6 +166,7 @@ C:\Users\<you>\Tools\claude-code-session-bridge\register_vscode_session_in_deskt
 
 ---
 
+<a id="folders"></a>
 ## 🧩 IMPORTANT — don't mix up these 3 folders (read this or you'll get confused)
 
 Almost everyone trips on this at first — including the person who *built* this tool. There are **three completely different folders** in play, and they are NOT the same thing:
@@ -177,6 +226,7 @@ Folder ③ (.claude) = Claude's private storage. The tool reads it FOR you. You 
 
 ---
 
+<a id="recipes"></a>
 ## 🚀 How to use it (copy-paste recipes)
 
 ### The 2 things every command needs
@@ -204,18 +254,21 @@ Example SCRIPT PATH :  C:\Users\Alex\Tools\claude-code-session-bridge\register_v
 Example PROJECT PATH:  C:\Users\Alex\Documents\my-website
 ```
 
+<a id="recipe-a"></a>
 ### ✅ Recipe A — add all new chats from ONE project (the everyday one)
 > *Plain English: "Look at my-website's chats and add a card for any that doesn't have one yet."*
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1" -ProjectPath "C:\Users\Alex\Documents\my-website" -Apply
 ```
 
+<a id="recipe-b"></a>
 ### 👀 Recipe B — preview only, change nothing (just drop `-Apply`)
 > *Plain English: "Show me what you WOULD add, but don't touch anything yet."*
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1" -ProjectPath "C:\Users\Alex\Documents\my-website"
 ```
 
+<a id="recipe-c"></a>
 ### 🎯 Recipe C — add ONE specific chat (by its id)
 > *Plain English: "I only want this single chat in the desktop app, not all of them."*
 
@@ -234,6 +287,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Users\Alex\Tools\claude-
 powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1" -SessionId 41c938f1-e81e-4d13-ad39-bde9636a51c0 -Apply
 ```
 
+<a id="recipe-d"></a>
 ### 🌍 Recipe D — add chats from EVERY project on the PC
 > *Plain English: "Sweep all my projects at once." Note: no `-ProjectPath` here — `-AllProjects` takes its place.*
 ```powershell
@@ -246,11 +300,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "‹SCRIPT PATH›" -Project
                                                       └─ paste path ①      └─ paste path ②
 ```
 
+<a id="restart"></a>
 ### ⚠️ The step everyone forgets
 **After running with `-Apply`, fully QUIT and RE-OPEN the desktop app.**
 The sidebar reads index cards **only when it starts up** — new cards won't appear until you restart.
 (Quit properly: right-click the Claude icon in the Windows tray, bottom-right near the clock → **Quit**. Just closing the window may not be enough.)
 
+<a id="errors"></a>
 ### 🆘 "It threw a red error" — the two common ones
 ```
 "... cannot be loaded because running scripts is disabled ..."
@@ -281,6 +337,7 @@ Result: 1 new sticky-note(s), 4 already registered (skipped).
 
 ---
 
+<a id="pingpong"></a>
 ## 🔁 The payoff: carry ONE chat between both apps ("ping-pong")
 
 Here's the part that surprises people: **there is nothing to "sync."** Your messages already live in **one shared notebook**. No copying, no uploading. The only trick is **each app re-reads the notebook when you OPEN the chat** — so "syncing" just means *open the chat in the other app.*
@@ -311,6 +368,7 @@ Here's the part that surprises people: **there is nothing to "sync."** Your mess
 
 ---
 
+<a id="undo"></a>
 ## 🗑️ How to undo (remove a chat from the desktop sidebar)
 
 ```
@@ -323,6 +381,7 @@ Here's the part that surprises people: **there is nothing to "sync."** Your mess
 
 ---
 
+<a id="drawer"></a>
 ## 🧭 Bonus: how a chat's folder becomes its "drawer" name on disk
 
 Claude Code files each chat under a folder name made from the chat's working directory, where **every character that isn't a letter or number becomes a dash `-`**:
@@ -338,6 +397,7 @@ That's why the **exact** folder matters: a parent folder, a subfolder, or a rena
 
 ---
 
+<a id="limits"></a>
 ## ⚠️ Honest limitations (no surprises)
 
 - **Windows only** (it uses Windows paths + PowerShell). Pull requests for macOS/Linux desktop paths are very welcome.
@@ -348,6 +408,7 @@ That's why the **exact** folder matters: a parent folder, a subfolder, or a rena
 
 ---
 
+<a id="license"></a>
 ## 📜 License
 
 **MIT** — see [LICENSE](LICENSE). Use it, fork it, share it, ship it.
