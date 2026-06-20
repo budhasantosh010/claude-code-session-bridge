@@ -82,37 +82,126 @@ That's it. It **reads** your chats (peek only) and **writes** new little card fi
 
 ---
 
+## 📥 Install — get the script onto your computer
+
+You need just **ONE file**: `register_vscode_session_in_desktop.ps1`. There is **nothing to compile or install** — you save this one file and run it. Pick either way to get it.
+
+### Way 1 — Download the ZIP (easiest, no tools needed)
+```
+1. Open   https://github.com/budhasantosh010/claude-code-session-bridge
+2. Click the green  "< > Code"  button  →  "Download ZIP"
+3. Find   claude-code-session-bridge-main.zip   in your Downloads folder
+4. Right-click it  →  "Extract All…"  →  choose a PERMANENT home, e.g.  C:\Users\<you>\Tools
+5. You now have the script here:
+   C:\Users\<you>\Tools\claude-code-session-bridge-main\register_vscode_session_in_desktop.ps1
+```
+
+### Way 2 — git clone (if you already have Git)
+```powershell
+cd C:\Users\<you>\Tools
+git clone https://github.com/budhasantosh010/claude-code-session-bridge.git
+```
+Result:
+```
+C:\Users\<you>\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1
+```
+
+> 📌 Keep it somewhere permanent you'll remember (a `Tools\` folder is perfect). **Don't leave it in Downloads** — too easy to delete by accident.
+
+### Copy the script's full path (you'll paste this into every command)
+```
+1. In File Explorer, find   register_vscode_session_in_desktop.ps1
+2. Hold SHIFT, right-click it  →  "Copy as path"
+3. The full path is now on your clipboard, e.g.:
+   "C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1"
+```
+
+---
+
 ## 🚀 How to use it (copy-paste recipes)
 
-You need **Windows** and **PowerShell**. Open a terminal: in VS Code, click **Terminal → New Terminal**.
+### The 2 things every command needs
+```
+① SCRIPT PATH   = where you saved register_vscode_session_in_desktop.ps1   (copied just above)
+② PROJECT PATH  = the folder you open in VS Code for that chat
+```
+**To copy the PROJECT PATH:** in VS Code, right-click the top folder in the Explorer sidebar → **"Copy Path"**.
+(Or in File Explorer, Shift+right-click the folder → **"Copy as path"**.)
 
-> 💡 **Golden habit:** run a recipe **without** `-Apply` first to *preview* (it writes nothing), then add `-Apply` to actually do it.
+### How to actually run a command
+```
+1. Open PowerShell:  in VS Code click  Terminal → New Terminal
+                     (or press the Windows key, type "PowerShell", press Enter)
+2. Paste a recipe below — with YOUR two paths filled in
+3. Press Enter
+```
+> 💡 **Golden habit:** run it **without** `-Apply` first — that's a *preview* and writes nothing. Happy with what it lists? Add `-Apply` and run again to actually write the cards.
 
-Let `SCRIPT` = the full path to `register_vscode_session_in_desktop.ps1` on your machine.
+---
 
-### Recipe A — add new chats from ONE folder (the usual case)
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "SCRIPT" -ProjectPath "C:\path\to\the\folder\you\opened\in\vscode" -Apply
+**👇 Every recipe below uses this ONE concrete example. Just swap in your own two paths.**
+```
+Example SCRIPT PATH :  C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1
+Example PROJECT PATH:  C:\Users\Alex\Documents\my-website
 ```
 
-### Recipe B — just preview, write nothing
+### ✅ Recipe A — add all new chats from ONE project (the everyday one)
+> *Plain English: "Look at my-website's chats and add a card for any that doesn't have one yet."*
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "SCRIPT" -ProjectPath "C:\path\to\folder"
+powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1" -ProjectPath "C:\Users\Alex\Documents\my-website" -Apply
 ```
 
-### Recipe C — one specific chat only
+### 👀 Recipe B — preview only, change nothing (just drop `-Apply`)
+> *Plain English: "Show me what you WOULD add, but don't touch anything yet."*
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "SCRIPT" -SessionId <session-id> -Apply
+powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1" -ProjectPath "C:\Users\Alex\Documents\my-website"
 ```
 
-### Recipe D — every chat in every project on the PC
+### 🎯 Recipe C — add ONE specific chat (by its id)
+> *Plain English: "I only want this single chat in the desktop app, not all of them."*
+
+**Step 1 — find the chat's id:**
+```
+1. Open File Explorer and go to:   C:\Users\<you>\.claude\projects\
+2. Open the "drawer" for your project. Its name is your PROJECT PATH with every
+   space and symbol turned into a dash. So:
+      C:\Users\Alex\Documents\my-website   →   c--Users-Alex-Documents-my-website
+3. Inside, each chat is a file named  <session-id>.jsonl . The filename IS the id:
+      41c938f1-e81e-4d13-ad39-bde9636a51c0.jsonl
+       └──────────────── this is the id ───────────────┘
+```
+**Step 2 — run it (paste the id after `-SessionId`):**
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "SCRIPT" -AllProjects -Apply
+powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1" -SessionId 41c938f1-e81e-4d13-ad39-bde9636a51c0 -Apply
+```
+
+### 🌍 Recipe D — add chats from EVERY project on the PC
+> *Plain English: "Sweep all my projects at once." Note: no `-ProjectPath` here — `-AllProjects` takes its place.*
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1" -AllProjects -Apply
+```
+
+### ✍️ Build your OWN command (fill in the 2 blanks)
+```
+powershell -NoProfile -ExecutionPolicy Bypass -File "‹SCRIPT PATH›" -ProjectPath "‹PROJECT PATH›" -Apply
+                                                      └─ paste path ①      └─ paste path ②
 ```
 
 ### ⚠️ The step everyone forgets
 **After running with `-Apply`, fully QUIT and RE-OPEN the desktop app.**
 The sidebar reads index cards **only when it starts up** — new cards won't appear until you restart.
+(Quit properly: right-click the Claude icon in the Windows tray, bottom-right near the clock → **Quit**. Just closing the window may not be enough.)
+
+### 🆘 "It threw a red error" — the two common ones
+```
+"... cannot be loaded because running scripts is disabled ..."
+   → You forgot the  -ExecutionPolicy Bypass  part. Copy the WHOLE recipe line; it's already in there.
+
+"No cabinet drawer for: C:\...\your-folder"
+   → That PROJECT PATH has no Claude Code chats yet, OR the path is slightly wrong.
+     Fix: make sure you copied the EXACT folder you open in VS Code (Explorer → right-click top
+     folder → "Copy Path"). Run Recipe B (preview) first to check before using -Apply.
+```
 
 ### Reading the output
 ```
