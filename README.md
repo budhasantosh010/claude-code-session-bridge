@@ -118,6 +118,65 @@ C:\Users\<you>\Tools\claude-code-session-bridge\register_vscode_session_in_deskt
 
 ---
 
+## 🧩 IMPORTANT — don't mix up these 3 folders (read this or you'll get confused)
+
+Almost everyone trips on this at first — including the person who *built* this tool. There are **three completely different folders** in play, and they are NOT the same thing:
+
+```
+①  THE SCRIPT (the tool)        ←  a .ps1 file. Just a helper program. Lives ANYWHERE.
+       C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1
+
+②  YOUR PROJECT FOLDER          ←  where YOUR code/work lives. The folder you open in VS Code.
+       C:\Users\Alex\Documents\my-website
+
+③  CLAUDE'S SESSIONS FOLDER     ←  Claude's OWN private storage. You NEVER point at this.
+       C:\Users\Alex\.claude\projects\...
+```
+
+### "Which folder do I put in the command?"
+👉 **Folder ② — your project folder** (the one you open in VS Code).
+🚫 **NOT folder ③** (`.claude\projects\...`).
+
+Why? The `-ProjectPath` part is asking **"which project's chats do you want?"** — and you name a project by **where its code lives** (its human name, like `...\my-website`). The script then quietly translates that into folder ③ for you. **You never type folder ③ yourself.**
+
+```
+YOU type:        -ProjectPath "C:\Users\Alex\Documents\my-website"        ← folder ② (your code)
+SCRIPT figures:  → look inside C:\Users\Alex\.claude\projects\c--Users-...-my-website\   ← folder ③
+                   (it does this itself — not your job)
+```
+
+### "Why is the .ps1 saved in some random folder? Shouldn't it live inside `.claude`?"
+**No.** Here's the key idea:
+
+> The `.ps1` file is **NOT part of Claude.** It's a small helper program. It has nothing to do with Claude's internal machinery, so it does **not** belong in `.claude`.
+
+```
+.claude\  =  Claude's house. Claude's own stuff (sessions, settings, memory).
+              ── you don't store your own tools inside someone else's house ──
+
+the .ps1  =  YOUR screwdriver. A tool. It can sit in ANY drawer you like —
+              Desktop, a Tools\ folder, anywhere. It works exactly the same.
+```
+
+The script's **location doesn't matter at all.** What matters is that your command **points at it** with the `-File "..."` part:
+
+```
+-File "C:\Users\Alex\Tools\claude-code-session-bridge\register_vscode_session_in_desktop.ps1"
+       └─────────── "hey PowerShell, run THIS tool — it's right here" ───────────┘
+```
+
+Move the `.ps1` to `C:\Tools\`? Then just change that to `-File "C:\Tools\register_vscode_session_in_desktop.ps1"` and it still runs fine.
+
+### One-line summary
+```
+RUN this tool ①  ──  to bookmark the chats of this project ②  ──  into the desktop app.
+   (-File "...ps1")        (-ProjectPath "...your code folder")
+
+Folder ③ (.claude) = Claude's private storage. The tool reads it FOR you. You never name it.
+```
+
+---
+
 ## 🚀 How to use it (copy-paste recipes)
 
 ### The 2 things every command needs
